@@ -4,6 +4,7 @@ import { checkPassword } from "@/utils/bcryptjs";
 import { NextResponse } from "next/server";
 import { open } from "sqlite";
 import sqlite3 from "sqlite3";
+import { createCookie } from "@/utils/sessions";
  
 export async function POST(req: Request) {
   // Get body request
@@ -21,6 +22,9 @@ export async function POST(req: Request) {
       { status: 403 }
     );
   }
+
+    const sessionData = { rowid: response, email: email }; // Data to add in the JWT payload such as user id, role, etc
+    await createCookie(sessionData);
  
   return NextResponse.json({ response });
 }
